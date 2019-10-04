@@ -1,12 +1,5 @@
-#RewriteEngine On
-#RewriteCond %{HTTPS} !=on
-#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301] 
-#RewriteRule ^(.*)$ {REQUEST_URI} [L,R=301] 
 
 RewriteEngine On
-Options -Indexes
-RewriteBase /
+RewriteRule ^(.*\/)*assets/(.*) www/assets/$2 [L]
+RewriteRule ^.* index.php [QSA,L]
 
-RewriteRule (assets/.+)$ /www/assets/$1 [NC,L]
-RewriteCond %{REQUEST_URI} !\.(?:css|js|jpg|png|jpeg|ico|svg|xml|json|ttf|woff)$ [NC]
-RewriteRule ^(.+)$ index.php [QSA,L]

@@ -1,6 +1,6 @@
 {
     "require": {
         "twig/twig": "2.0",
-        "illuminate/database": "^5.8"
+        "twig/extensions": "^1.5"
     }
 }

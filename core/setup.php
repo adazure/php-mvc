@@ -2,6 +2,7 @@
 if (!defined('extension')) {
     define("extension", ".twig");
 }
-require 'database.php';
-require 'controller.php';
-require 'router.php';
+require __root__.'/core/database.php';
+require __root__.'/core/lang.php';
+require __root__.'/core/controller.php';
+require __root__.'/core/router.php';

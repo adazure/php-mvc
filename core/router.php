@@ -3,33 +3,64 @@
 class Router
 {
 
-    private $CONTROLLER_PATH = __root__ . '/controllers/';
+    private static $ROUTES = [];
+    private static $CONTROLLER_PATH = __root__ . '/controllers/';
+    private static $LOCK = false;
 
-    private function runAction($route, $arr)
+    public static function get($url, $controller, $action)
     {
-        $controller = $this->CONTROLLER_PATH . $route['controller'] . '.php';
-        require_once $controller;
-        call_user_func_array([new $route['controller'], $route['action']], $arr);
+
+        self::route($url, $controller, $action, 'GET');
     }
 
-    private function parse($route)
+    public static function post($url, $controller, $action)
     {
-        $map = str_replace('/', '\/', $route['url']);
-        $map = preg_replace('/\{[a-zA-Z0-9_-]+\}/', '(\w+?)', $map);
-        if (preg_match('/^' . $map . '[\/]*$/', $_SERVER["REQUEST_URI"], $matches)) {
-            $this->runAction($route, array_splice($matches, 1));
-            exit;
-        }
+        self::route($url, $controller, $action, 'POST');
     }
 
-    public function __construct($routes)
+    public static function delete($url, $controller, $action)
     {
-        foreach ($routes as $key => $value) {
-            $this->parse($value);
+        self::route($url, $controller, $action, 'DELETE');
+    }
+
+    public static function put($url, $controller, $action)
+    {
+        self::route($url, $controller, $action, 'PUT');
+    }
+
+    public static function test()
+    {
+        return "Run function";
+    }
+/**************************************************************** */
+    private static function route($url, $controller, $action, $method)
+    {
+        if ($method === $_SERVER["REQUEST_METHOD"]) {
+            self::parse($url, $controller, $action);
         }
-        
-        header('Location: /', true, 301);
-exit;
+    }
+/**************************************************************** */
+
+    private static function runController($controller, $action, $arr)
+    {
+        self::$LOCK = true;
+        $controllerFile = self::$CONTROLLER_PATH . $controller . '.php';
+        require_once $controllerFile;
+        call_user_func_array([new $controller, $action], $arr);
+    }
+/**************************************************************** */
+
+    private static function parse($url, $contoller, $action)
+    {
+        if (!self::$LOCK) {
+            $map = str_replace('/','\/', $url);
+            $base = str_replace(__base__,'',$_SERVER["REQUEST_URI"]);
+            $map = preg_replace('/\{[a-zA-Z0-9_-]+\}/', '(\w+?)', $map);
+           
+            if (preg_match('/^' . $map . '[\/]*$/', $base, $matches)) {
+                self::runController($contoller, $action, []);
+            }
+        }
     }
 
 }

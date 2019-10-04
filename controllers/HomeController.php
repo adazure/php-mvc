@@ -6,8 +6,4 @@ class HomeController extends Controller
         self::view('home');
     }
 
-    public function product(){
-        self::view('product');
-    }
-
 }
