@@ -2,7 +2,7 @@
 require 'config.php';
 define("__root__", __DIR__);
 if (env == 'development') {
-    define('__base__', '/yldzlab');
+    define('__base__', '');
 } else {
     define('__base__', '');
 }
