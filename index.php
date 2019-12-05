@@ -11,7 +11,3 @@ if (env == 'development') {
 require __root__ . '/vendor/autoload.php';
 require 'core/setup.php';
 
-
-// Lang::calture('tr');
-
-Router::get('', 'HomeController', 'index');
